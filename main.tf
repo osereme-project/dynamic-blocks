@@ -13,32 +13,32 @@ provider "aws" {
 }
 
 data "aws_vpc" "virtual-network" {
-  id = "vpc-0e9f0f30a0a64e0ca"
+  id = "vpc-id"
 }
 
 
 locals {
   aws_instance =[{
-    ami           = "ami-04b70fa74e45c3917"
-    instance_type = "t2.micro"
+    ami           = "ami-id"
+    instance_type = "instance-type"
   }]
 
   ingress = [{
-    port        = 443
-    description = "Port 443"
-    protocol    = "tcp"
+    port        = "port number"
+    description = "Port description"
+    protocol    = "protocol-type"
     },
     {
-      port        = 80
-      description = "Port 80"
-      protocol    = "tcp"
+      port        = "port number"
+      description = "Port description"
+      protocol    = "protocol-type"
   }]
 }
 
 
-resource "aws_security_group" "project_server_1_sg" {
-  name        = "project_server_1_sg"
-  description = "project_server_1 security group"
+resource "aws_security_group" "resource-name" {
+  name        = "resource-name"
+  description = ""
   vpc_id      = data.aws_vpc.virtual-network.id
 
   dynamic "ingress" {
@@ -58,11 +58,11 @@ resource "aws_security_group" "project_server_1_sg" {
 
   egress = [
     {
-      description      = "outgoing traffic"
-      from_port        = 0
-      to_port          = 0
-      protocol         = "-1"
-      cidr_blocks      = ["0.0.0.0/0"]
+      description      = ingress.value.description
+      from_port        = ingress.value.from.port
+      to_port          = ingress.value.to.port
+      protocol         = ingress.value.protocol
+      cidr_blocks      = vpc.virtual-network.cidr_block
       ipv6_cidr_blocks = []
       prefix_list_ids  = []
       security_groups  = []
